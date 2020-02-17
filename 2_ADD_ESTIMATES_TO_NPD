@@ -1,0 +1,370 @@
+--PROCEDURE TO ADD ESTIMATES TO NPS
+REPLACE PROCEDURE SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_PROC ()
+BEGIN
+
+	DELETE FROM SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE ;
+	
+	INSERT INTO SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE
+
+	SELECT 
+		CAST("Item Code" AS INTEGER) AS "Item Code"
+		, "Item Description NPD"
+		, "Item Description"
+		, "Title"
+		, NULL AS MDM_COMPETITOR_INSTALLMENT_SHORT_DESCRIPTION
+		, "Segment"
+		, "Subsegment"
+		, "SupGenre"
+		, "Genre"
+		, "ESRB"
+		, "Property"
+		, "Distribution Channel"
+		, "Title Distribution Channel"
+		, "License"
+		, "Digital Upgrade Flag"
+		, "Customer Offer Category"
+		, "Customer Offer Segment"
+		, "Customer Offer Type"
+		, "Publisher"
+		, "Publisher NPD"
+		, "Publisher Rank"
+		, "Corp Publisher Top 15"
+		, "DLP Flag"
+		, "Platform"
+		, "Platform NPD"
+		, "Platform Console PC"
+		, "Platform 1st Party"
+		, "Platform Active Flag"
+		, "Platform NewOldGen"
+		, "Digital Distributor"
+		, "Projection Flag Item"
+		, "Projection Flag Title Platform"
+		, "Projection Flag Title"
+		, "US Release Date Digital Item"
+		, "US Release Date Retail Item"
+		, "US Release Date Digital Title Platform"
+		, "US Release Date Retail Title Platform"
+		, "US Release Date Title Platform"
+		, "US Release Date Digital Title"
+		, "US Release Date Retail Title"
+		, "US Release Date Title"
+		, "US Release Month Title"
+		, "US Release CY Title"
+		, "US Release FY Title"
+		, "Country Code"
+		, "Currency"
+		, "Region"
+		, "Free/Paid"
+		, "Free Unit Flag"
+		, "Data Source"
+		, "Source"
+		, "NPD Month"
+		, "Relative Month (Item)"
+		, "Relative Month (Title Platform)"
+		, "Relative Month (Title)"
+		, "Month Name"
+		, "Cal Month"
+		, "Cal Qtr"
+		, "Cal Year"
+		, "Fiscal Month"
+		, "Fiscal Qtr"
+		, "Fiscal Year"
+		, "Last Month Flag"
+		, "Calendar YTD"
+		, "Month Age"
+		, "Fiscal YTD"
+		, "Generation"
+		, "VR Games"
+		, "Units"
+		, "Gross $"
+		, "Gross LC" 
+	FROM "SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB"."NPD_VW_FT_FULL_NPD_MONTHLY" NPD
+	;
+	
+	--FOR ALL PC ESTIMATES EXCEPT UBI
+	INSERT INTO SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE
+	
+	SELECT 
+		CAST("Item Code" AS INTEGER) AS "Item Code"
+		, "Item Description NPD"
+		, "Item Description"
+		, "Title"
+		, NULL AS MDM_COMPETITOR_INSTALLMENT_SHORT_DESCRIPTION
+		, "Segment"
+		, "Subsegment"
+		, "SupGenre"
+		, "Genre"
+		, "ESRB"
+		, "Property"
+		, "Distribution Channel"
+		, "Title Distribution Channel"
+		, "License"
+		, "Digital Upgrade Flag"
+		, "Customer Offer Category"
+		, "Customer Offer Segment"
+		, "Customer Offer Type"
+		, "Publisher"
+		, "Publisher NPD"
+		, "Publisher Rank"
+		, "Corp Publisher Top 15"
+		, "DLP Flag"
+		, "Platform"
+		, "Platform NPD"
+		, "Platform Console PC"
+		, "Platform 1st Party"
+		, "Platform Active Flag"
+		, "Platform NewOldGen"
+		, "Digital Distributor"
+		, "Projection Flag Item"
+		, "Projection Flag Title Platform"
+		, "Projection Flag Title"
+		, "US Release Date Digital Item"
+		, "US Release Date Retail Item"
+		, "US Release Date Digital Title Platform"
+		, "US Release Date Retail Title Platform"
+		, "US Release Date Title Platform"
+		, "US Release Date Digital Title"
+		, "US Release Date Retail Title"
+		, "US Release Date Title"
+		, "US Release Month Title"
+		, "US Release CY Title"
+		, "US Release FY Title"
+		, "Country Code"
+		, "Currency"
+		, "Region"
+		, "Free/Paid"
+		, "Free Unit Flag"
+		, "Data Source"
+		, "Source"
+		, "NPD Month"
+		, "Relative Month (Item)"
+		, "Relative Month (Title Platform)"
+		, "Relative Month (Title)"
+		, "Month Name"
+		, "Cal Month"
+		, "Cal Qtr"
+		, "Cal Year"
+		, "Fiscal Month"
+		, "Fiscal Qtr"
+		, "Fiscal Year"
+		, "Last Month Flag"
+		, "Calendar YTD"
+		, "Month Age"
+		, "Fiscal YTD"
+		, "Generation"
+		, "VR Games"
+		, CAST("Units" AS DECIMAL(18,5)) AS "Units"
+		, CAST("Gross $" AS DECIMAL(18,5)) AS "Gross $"
+		, CAST("Gross LC" AS DECIMAL(18,5)) AS "Gross LC" 
+	FROM	
+	
+	(SELECT 
+		--NPD_PL_EST.*
+		ITEM_CODE.ITEM_CODE_CALC AS "Item Code"
+		, NPD."Title" || ' PC ' || 'Estimate' AS "Item Description NPD"
+		, NPD."Title" || ' PC ' || 'Estimate' AS "Item Description"
+		, NPD."Title"
+		, 'Full Game' AS "Segment"
+		, "Subsegment"
+		, "SupGenre"
+		, "Genre"
+		, "ESRB"
+		, "Property"
+		, "Distribution Channel"
+		, "Title Distribution Channel"
+		, "License"
+		, "Digital Upgrade Flag"
+		, "Customer Offer Category"
+		, 'Game' AS "Customer Offer Segment"
+		, 'Game' AS "Customer Offer Type"
+		, NPD."Publisher"
+		, "Publisher NPD"
+		, "Publisher Rank"
+		, "Corp Publisher Top 15"
+		, "DLP Flag"
+		, 'PC' AS "Platform"
+		, 'PC' AS "Platform NPD"
+		, 'PC' AS "Platform Console PC"
+		, 'PC' AS "Platform 1st Party"
+		, "Platform Active Flag"
+		, '4 PC' AS "Platform NewOldGen"
+		, 'PC' AS "Digital Distributor"
+		, 'yes' AS "Projection Flag Item"
+		, 'yes' AS "Projection Flag Title Platform"
+		, "Projection Flag Title"
+		, "US Release Date Digital Title" AS "US Release Date Digital Item"
+		, "US Release Date Digital Title" AS "US Release Date Retail Item"
+		, "US Release Date Digital Title" AS "US Release Date Digital Title Platform"
+		, "US Release Date Digital Title" AS "US Release Date Retail Title Platform"
+		, "US Release Date Digital Title" AS "US Release Date Title Platform"
+		, "US Release Date Digital Title"
+		, "US Release Date Retail Title"
+		, "US Release Date Title"
+		, "US Release Month Title"
+		, "US Release CY Title"
+		, "US Release FY Title"
+		, "Country Code"
+		, "Currency"
+		, "Region"
+		, "Free/Paid"
+		, "Free Unit Flag"
+		, 'PC_Projections' AS "Data Source"
+		, 'PC_Projections' AS "Source"
+		, "NPD Month"
+		, "Relative Month (Title)" AS "Relative Month (Item)"
+		, "Relative Month (Title)" AS "Relative Month (Title Platform)"
+		, "Relative Month (Title)"
+		, "Month Name"
+		, "Cal Month"
+		, "Cal Qtr"
+		, "Cal Year"
+		, "Fiscal Month"
+		, "Fiscal Qtr"
+		, "Fiscal Year"
+		, "Last Month Flag"
+		, "Calendar YTD"
+		, "Month Age"
+		, "Fiscal YTD"
+		, 'Current' AS "Generation"
+		, "VR Games"
+		, SUM(CASE
+				WHEN "Platform" IN ('PS4', 'XB1') THEN ("Units")
+				ELSE 0.00
+				END ) AS UNITS_CONSOLE
+		, SUM(CASE
+				WHEN "Platform" = 'PC' THEN ("Units")
+				ELSE 0.00
+				END ) AS UNITS_PC
+		, (CAST(CASE
+				WHEN NPD_PL_EST."PC %" >= 1.0000 OR NPD_PL_EST."PC %" <= 0.0000 THEN 0.00
+				WHEN UNITS_PC = 0 THEN (UNITS_CONSOLE * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))
+				ELSE (UNITS_CONSOLE * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))- UNITS_PC
+				END AS DECIMAL(18,5))) AS "Units"--UNITS_PC_CALC
+		, SUM(CASE
+				WHEN "Platform" IN ('PS4', 'XB1') THEN ("Gross $")
+				ELSE 0.00
+				END ) AS GROSS_CONSOLE_USD
+		, SUM(CASE
+				WHEN "Platform" = 'PC' THEN ("Gross $")
+				ELSE 0.00
+				END ) AS GROSS_PC_USD
+		, (CAST(CASE
+				WHEN NPD_PL_EST."PC %" >= 1.0000 OR NPD_PL_EST."PC %" <= 0.0000 THEN 0.00
+				WHEN UNITS_PC = 0 THEN (GROSS_CONSOLE_USD * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))
+				ELSE (GROSS_CONSOLE_USD * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))- GROSS_PC_USD
+				END AS DECIMAL(18,5))) AS "Gross $"--GROSS_PC_USD_CALC
+		, SUM(CASE
+				WHEN "Platform" IN ('PS4', 'XB1') THEN ("Gross LC")
+				ELSE 0.00
+				END ) AS GROSS_CONSOLE
+		, SUM(CASE
+				WHEN "Platform" = 'PC' THEN ("Gross LC")
+				ELSE 0.00
+				END ) AS GROSS_PC
+		, (CAST(CASE
+				WHEN NPD_PL_EST."PC %" >= 1.0000 OR NPD_PL_EST."PC %" <= 0.0000 THEN 0.00
+				WHEN UNITS_PC = 0 THEN (GROSS_CONSOLE * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))
+				ELSE (GROSS_CONSOLE * CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))/ (1 - CAST(NPD_PL_EST."PC %" AS DECIMAL(5,5)))- GROSS_PC
+				END AS DECIMAL(18,5))) AS "Gross LC"--GROSS_PC_CALC
+	FROM "SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB"."NPD_VW_FT_FULL_NPD_MONTHLY" NPD 
+	INNER JOIN (SELECT * FROM SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_PLATFORM_ESTIMATION_TABLE WHERE Publisher NOT IN ('Take 2')) NPD_PL_EST
+		ON NPD."Title" = NPD_PL_EST."Title"
+		--AND NPD."Publisher" = NPD_PL_EST."Publisher"
+	--WHERE NPD."Title" = 'Call of Duty: Modern Warfare 2019'
+	INNER JOIN
+		(SELECT SOURCE_TITLE_NAME, 500000000+MAX(SELL_THROUGH_PANEL_ITEM_KEY) AS ITEM_CODE_CALC
+			FROM
+			(SELECT SOURCE_TITLE_NAME, (SELL_THROUGH_PANEL_ITEM_KEY)
+				FROM EDP_UNRESTRICTED_LAB.VW_DIM_SELL_THROUGH_PANEL_ITEM SI
+				WHERE SI.MDM_COMPETITOR_IPC_SEGMENT = 'Full Game'
+				GROUP BY 1,2,SI.MDM_COMPETITOR_IPC_SEGMENT --,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
+			)A
+		GROUP BY 1
+		) ITEM_CODE ON ITEM_CODE.SOURCE_TITLE_NAME = NPD_PL_EST."Title"
+	WHERE --"Distribution Channel" = 'Digital'
+		--AND "Region" = 'United States'
+		--AND "NPD Month" = '2019-12-01'
+		 NPD."Publisher" NOT IN ('Ubisoft')
+		--AND NPD."Title" = 'WWE 2K20'--'Call of Duty: Modern Warfare 2019'
+	group by 1,	2,	3,	4,	5,	6,	7,	8,	9,	10,	11,	12,	13,	14,	15,	16,	17,	18,	19,	20,	21,	22,	23,	24,	25
+				,	26,	27,	28,	29,	30,	31,	32,	33,	34,	35,	36,	37,	38,	39,	40,	41,	42,	43,	44,	45,	46,	47,	48,	49,	50
+				,	51,	52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67
+				, NPD_PL_EST."PC %", NPD_PL_EST."Title", NPD_PL_EST."Publisher" 
+				
+	) A
+	;
+	
+	
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Item Code";
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Item Description NPD" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Item Description" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN MDM_COMPETITOR_INSTALLMENT_SHORT_DESCRIPTION;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Segment" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Subsegment" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "SupGenre" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "ESRB" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Property" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Distribution Channel" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Title Distribution Channel" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "License" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Digital Upgrade Flag" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Customer Offer Category" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Customer Offer Segment" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Customer Offer Type" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Publisher" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Publisher NPD" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Publisher Rank" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Corp Publisher Top 15" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "DLP Flag" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform NPD" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform Console PC" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform 1st Party" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform Active Flag" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Platform NewOldGen" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Digital Distributor" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Projection Flag Item" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Projection Flag Title Platform" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Projection Flag Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Digital Item" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Retail Item" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Digital Title Platform" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Retail Title Platform" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Title Platform" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Digital Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Retail Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Date Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release Month Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release CY Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "US Release FY Title" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Country Code" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Currency" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Region" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Free/Paid" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Free Unit Flag" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Data Source" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Source" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "NPD Month" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Relative Month (Item)" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Relative Month (Title Platform)" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Relative Month (Title)" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Month Name" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Cal Month" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Cal Qtr" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Cal Year" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Fiscal Month" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Fiscal Qtr" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Fiscal Year" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Last Month Flag" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Calendar YTD" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Month Age" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Fiscal YTD" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Generation" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "VR Games" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Units" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Gross $" ;
+	COLLECT STATISTICS SB_SALES_SUPPLY_CHAIN_NCSA_ANALYTICS_LAB.AB_NPD_ESTIMATION_TABLE COLUMN "Gross LC" ;
+
+	
+END;
